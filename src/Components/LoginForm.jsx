@@ -4,6 +4,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
 
 const LoginForm = () => {
+  const [login, setLogin] = useState(false);
   const [err, setErr] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -15,6 +16,7 @@ const LoginForm = () => {
     try {
       const resp = await signInWithEmailAndPassword(auth, email, password);
       console.log("success");
+      setLogin(true);
     } catch (err) {
       setErr(true);
     }

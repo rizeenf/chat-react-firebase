@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import addImage from "../assets/img/addImage.png";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth, storage, db } from "../firebase";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { doc, setDoc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 
 const RegisterForm = () => {
   const [err, setErr] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -15,8 +19,39 @@ const RegisterForm = () => {
     const image = e.target[3].files[0];
 
     try {
-      const res = await createUserWithEmailAndPassword(auth, email, password);
-      console.log(res);
+      const resp = await createUserWithEmailAndPassword(auth, email, password);
+      console.log(resp);
+
+      const storageRef = ref(storage, username);
+
+      const uploadTask = uploadBytesResumable(storageRef, image);
+
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {},
+        (error) => {
+          setErr(true);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+            await updateProfile(resp.user, {
+              username,
+              photoURL: downloadURL,
+            });
+
+            await setDoc(doc(db, "users", resp.user.uid), {
+              uid: resp.user.uid,
+              username,
+              email,
+              photoURL: downloadURL,
+            });
+
+            await setDoc(doc(db, "usersChat", resp.user.uid), {});
+            navigate("/");
+            console.log(resp.user);
+          });
+        }
+      );
     } catch (err) {
       setErr(true);
     }
@@ -45,7 +80,7 @@ const RegisterForm = () => {
           />
           <input
             type="password"
-            placeholder="Password"
+            placeholder="Password at least 6 characters"
             className="border-b-2 text-text border-b-cream p-2 w-72"
           />
           <input type="file" id="file" style={{ display: "none" }} />
