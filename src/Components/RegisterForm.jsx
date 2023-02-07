@@ -56,11 +56,16 @@ const RegisterForm = () => {
       setErr(true);
     }
   };
+  const handleLogin = () => {
+    navigate("/login");
+  };
 
   return (
     <div className="bg-primary w-screen h-screen flex justify-center items-center">
       <div className="flex flex-col justify-center items-center gap-4 bg-white rounded-xl py-8 px-20">
-        <span className="text-4xl font-bold text-creamDarker">Chat React</span>
+        <span className="text-4xl font-bold text-creamDarker">
+          Mamang Wangsaf
+        </span>
         <span className="text-xl font-semibold text-creamDarker pb-5">
           Register
         </span>
@@ -101,7 +106,8 @@ const RegisterForm = () => {
         </form>
         {err && <span>Something wrong</span>}
         <span className="text-text text-sm mt-2">
-          You do have an account? Login
+          You do have an account?
+          <button onClick={handleLogin}>Login</button>
         </span>
       </div>
     </div>
