@@ -35,6 +35,7 @@ const RegisterForm = () => {
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
             await updateProfile(resp.user, {
+              displayName: username,
               username,
               photoURL: downloadURL,
             });

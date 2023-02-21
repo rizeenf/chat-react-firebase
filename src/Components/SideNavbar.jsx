@@ -17,7 +17,7 @@ const SideNavbar = () => {
           alt="Img Profil"
           className=" w-8 h-8 object-cover rounded-full "
         />
-        <span className="text-sm text-text">{userLogin.username} </span>
+        <span className="text-sm text-text">{userLogin.displayName} </span>
         <button
           onClick={() => signOut(auth)}
           className=" bg-primary text-text text-sm rounded-md p-1 hover:bg-cream  "
