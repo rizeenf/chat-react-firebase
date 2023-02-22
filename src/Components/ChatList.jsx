@@ -30,26 +30,26 @@ const ChatList = () => {
 
   return (
     <div>
-      {Object.entries(chats)?.map((doc) => (
-        <div
-          className="flex flex-row items-center gap-2 p-2 cursor-pointer hover:bg-creamDark"
-          key={doc[0]}
-          onClick={() => handleClick(doc[1].userInfo)}
-        >
-          <img
-            src={doc[1].userInfo.photoURL}
-            className=" w-8 h-8 object-cover rounded-full "
-          />
-          <div className=" flex flex-col">
-            <span className="text-md font-bold">
-              {doc[1].userInfo.displayName}
-            </span>
-            <span className=" text-sm text-text">
-              {/* {doc[1].userInfo.displayName} */}
-            </span>
+      {Object.entries(chats)
+        ?.sort((a, b) => b[1].date - a[1].date)
+        .map((doc) => (
+          <div
+            className="flex flex-row items-center gap-2 p-2 cursor-pointer hover:bg-creamDark"
+            key={doc[0]}
+            onClick={() => handleClick(doc[1].userInfo)}
+          >
+            <img
+              src={doc[1].userInfo.photoURL}
+              className=" w-8 h-8 object-cover rounded-full "
+            />
+            <div className=" flex flex-col">
+              <span className="text-md font-bold">
+                {doc[1].userInfo.displayName}
+              </span>
+              <span className=" text-sm text-text">{doc[1].lastMsg?.text}</span>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
     </div>
   );
 };
