@@ -10,9 +10,9 @@ const ChatInfo = () => {
   return (
     <div className=" bg-creamDarker flex flex-row justify-between p-3 items-center">
       <div className=" flex flex-row items-center gap-3 ">
-        <img src={data?.user.photoURL} className=" h-10 w-10 rounded-full" />
+        <img src={data.user?.photoURL} className=" h-10 w-10 rounded-full" />
         <span className=" font-semibold text-md text-text">
-          {data?.user.displayName}
+          {data.user?.displayName}
         </span>
       </div>
       <div className=" flex flex-row items-center">

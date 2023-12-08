@@ -21,10 +21,8 @@ const SearchBar = () => {
   const { userLogin } = useContext(AuthContext);
 
   const handleChange = async () => {
-    const q = query(
-      collection(db, "users"),
-      where("username", "==", searchUser)
-    );
+    const qRef = collection(db, "users");
+    const q = query(qRef, where("displayName", "==", searchUser));
 
     try {
       const qSnapshot = await getDocs(q);
@@ -54,8 +52,7 @@ const SearchBar = () => {
         await updateDoc(doc(db, "usersChat", userLogin.uid), {
           [combinedId + ".userInfo"]: {
             uid: user.uid,
-            displayName: user.username,
-            username: user.username,
+            displayName: user.displayName,
             photoURL: user.photoURL,
           },
           [combinedId + ".date"]: serverTimestamp(),
@@ -65,7 +62,6 @@ const SearchBar = () => {
           [combinedId + ".userInfo"]: {
             uid: userLogin.uid,
             displayName: userLogin.displayName,
-            username: userLogin.displayName,
             photoURL: userLogin.photoURL,
           },
           [combinedId + ".date"]: serverTimestamp(),
@@ -102,7 +98,7 @@ const SearchBar = () => {
             className=" w-8 h-8 object-cover rounded-full "
           />
           <div className=" flex flex-col">
-            <span className="text-md font-bold">{user.username}</span>
+            <span className="text-md font-bold">{user.displayName}</span>
             <span className=" text-sm text-text"></span>
           </div>
         </div>

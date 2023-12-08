@@ -8,48 +8,52 @@ import { useNavigate } from "react-router-dom";
 
 const RegisterForm = () => {
   const [err, setErr] = useState(false);
+  const [isRegistered, setIsRegistered] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const username = e.target[0].value;
+    const displayName = e.target[0].value;
     const email = e.target[1].value;
     const password = e.target[2].value;
-    const image = e.target[3].files[0];
+    const file = e.target[3].files[0];
 
     try {
-      const resp = await createUserWithEmailAndPassword(auth, email, password);
-      console.log(resp);
+      const res = await createUserWithEmailAndPassword(auth, email, password);
 
-      const storageRef = ref(storage, username);
+      const storageRef = ref(storage, displayName);
 
-      const uploadTask = uploadBytesResumable(storageRef, image);
+      const uploadTask = uploadBytesResumable(storageRef, file);
 
       uploadTask.on(
-        "state_changed",
-        (snapshot) => {},
         (error) => {
+          console.error("Error", error);
           setErr(true);
+          setIsRegistered(false);
         },
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-            await updateProfile(resp.user, {
-              displayName: username,
-              username,
+            await updateProfile(res.user, {
+              displayName,
               photoURL: downloadURL,
             });
 
-            await setDoc(doc(db, "users", resp.user.uid), {
-              uid: resp.user.uid,
-              username,
+            await setDoc(doc(db, "users", res.user.uid), {
+              uid: res.user.uid,
+              displayName,
               email,
               photoURL: downloadURL,
             });
 
-            await setDoc(doc(db, "usersChat", resp.user.uid), {});
-            navigate("/");
-            console.log(resp.user);
+            await setDoc(doc(db, "usersChat", res.user.uid), {});
+
+            setIsRegistered(true);
+            console.log("Success Register");
+
+            setTimeout(() => {
+              navigate("/login");
+            }, 1000);
           });
         }
       );
@@ -57,6 +61,7 @@ const RegisterForm = () => {
       setErr(true);
     }
   };
+
   const handleLogin = () => {
     navigate("/login");
   };
@@ -76,7 +81,7 @@ const RegisterForm = () => {
         >
           <input
             type="text"
-            placeholder="Username"
+            placeholder="Display Name"
             className="border-b-2 text-text border-b-cream p-2 w-72"
           />
           <input
@@ -89,26 +94,42 @@ const RegisterForm = () => {
             placeholder="Password at least 6 characters"
             className="border-b-2 text-text border-b-cream p-2 w-72"
           />
-          <input type="file" id="file" style={{ display: "none" }} />
+
           <label
             htmlFor="file"
             className="text-text cursor-pointer flex flex-row justify-center items-center gap-3 "
           >
             <img src={addImage} alt="Add Image" width="32px" />
-            <span className="text-sm"> Choose an Profile picture</span>
+            <span className="text-sm">
+              <input
+                type="file"
+                id="file"
+                accept="image/*"
+                className="border-b-2 text-text border-b-cream w-60"
+              />
+            </span>
           </label>
 
           <button
             name="submit"
-            className=" bg-primary w-1/3 text-text rounded p-2"
+            className=" bg-primary w-1/3 text-text rounded p-2 hover:bg-creamDarker"
           >
             Sign up
           </button>
         </form>
         {err && <span>Something wrong</span>}
+        {isRegistered && (
+          <span>Success Registered, redirecting to login page..</span>
+        )}
         <span className="text-text text-sm mt-2">
           You do have an account?
-          <button onClick={handleLogin}>Login</button>
+          <button className="hover:text-creamDarker" onClick={handleLogin}>
+            Login
+          </button>
+        </span>
+        <span className="text-text text-sm mt-2">
+          How it works : <br />- Create 2 account <br />- Chat each other
+          (search username)
         </span>
       </div>
     </div>

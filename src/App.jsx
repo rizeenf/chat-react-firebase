@@ -15,7 +15,7 @@ function App() {
     }
 
     if (userLogin) {
-      console.log(userLogin.email);
+      console.log({ loggedIn: userLogin.email });
       return children;
     }
   };

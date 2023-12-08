@@ -25,7 +25,7 @@ const LoginForm = () => {
     } catch (err) {
       console.log(err.message);
       setErr(true);
-      setRespErr(err.message);
+      setRespErr("Error :", err.message);
     }
   };
 
@@ -58,15 +58,21 @@ const LoginForm = () => {
 
           <button
             name="submit"
-            className=" bg-primary w-1/3 text-text rounded p-2"
+            className=" bg-primary w-1/3 text-text rounded p-2 hover:bg-creamDarker"
           >
             Log in
           </button>
         </form>
         {err && <span>{respErr}</span>}
-        <span className="text-text text-sm mt-2">
+        <span className="text-text text-sm mt-2 ">
           You don't have an account?
-          <button onClick={handleRegister}>Register</button>
+          <button className="hover:text-creamDarker" onClick={handleRegister}>
+            Register
+          </button>
+        </span>
+        <span className="text-text text-sm mt-2">
+          How it works : <br />- Create 2 account <br />- Chat each other
+          (search username)
         </span>
       </div>
     </div>
