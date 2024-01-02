@@ -81,16 +81,22 @@ const RegisterForm = () => {
             type="text"
             placeholder="Display Name"
             className="border-b-2 text-text border-b-cream p-2 w-72"
+            required
+            minLength={5}
           />
           <input
             type="email"
             placeholder="Email"
             className="border-b-2 text-text border-b-cream p-2 w-72"
+            required
+            minLength={10}
           />
           <input
             type="password"
             placeholder="Password at least 6 characters"
             className="border-b-2 text-text border-b-cream p-2 w-72"
+            required
+            minLength={6}
           />
 
           <label
@@ -104,6 +110,7 @@ const RegisterForm = () => {
                 id="file"
                 accept="image/*"
                 className="border-b-2 text-text border-b-cream w-60"
+                required
               />
             </span>
           </label>

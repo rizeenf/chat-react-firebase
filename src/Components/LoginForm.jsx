@@ -47,11 +47,15 @@ const LoginForm = () => {
             type="email"
             placeholder="Email"
             className="border-b-2 text-text border-b-cream p-2 w-72"
+            required
+            minLength={10}
           />
           <input
             type="password"
             placeholder="Password"
             className="border-b-2 text-text border-b-cream p-2 w-72"
+            required
+            minLength={6}
           />
 
           <button
